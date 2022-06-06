@@ -6,25 +6,24 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id');
-      table.string('country');
-      table.string('city');
-      table.string('street');
-      table.string('postalCode');
-      table.float('area');
-      table.string('energyCategory');
-      table.string('description', 1500);
-      table.string('type');
-      table.string('numberOfRooms');
-      table.boolean('isRenovated');
-      table.float('value');
-      table.float('maxValue');
-      table.float('minValue');
+      table.string('country').notNullable();
+      table.string('city').notNullable();
+      table.string('street').notNullable();
+      table.integer('street_number').notNullable
+      table.string('postal_code').notNullable();
+      table.float('area').notNullable();
+      table.string('energy_category').notNullable();
+      table.string('description', 1500).notNullable();
+      table.string('type').notNullable();
+      table.string('number_of_rooms').notNullable();
+      table.boolean('is_renovated').notNullable();
+      table.float('value', 12, 2).notNullable();
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
-      table.timestamp('created_at', { useTz: true })
-      table.timestamp('updated_at', { useTz: true })
+      table.timestamp('created_at');
+      table.timestamp('updated_at');
     })
   }
 

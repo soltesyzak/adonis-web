@@ -1,4 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import { schema } from '@ioc:Adonis/Core/Validator';
+
 import Asset from 'App/Models/Asset';
 
 export default class AssetsController {
@@ -7,8 +9,24 @@ export default class AssetsController {
     }
 
     public store = async ({ request, response }: HttpContextContract) => {
-        const body = request.body();
-        const asset = await Asset.create(body); // create instance and save 
+        const newAssetSchema = schema.create({
+            country: schema.string({ trim: true }),
+            city: schema.string({ trim: true }),
+            street: schema.string({ trim: true }),
+            streetNumber: schema.number(),
+            postalCode: schema.string({ trim: true }),
+            area: schema.number(),
+            description: schema.string({ trim: true }),
+            type: schema.string({ trim: true }),
+            numberOfRooms: schema.number(),
+            energyCategory: schema.string({ trim: true }),
+            isRenovated: schema.boolean(),
+            value: schema.number(),
+        })
+
+        const payload = await request.validate({schema: newAssetSchema});
+
+        const asset = await Asset.create(payload); // create instance and save 
 
         response.status(201);
 
@@ -30,6 +48,8 @@ export default class AssetsController {
 
     public destroy = async ({ params }: HttpContextContract) => {
         const asset = await Asset.findOrFail(params.id);
-        return asset.delete();
+        await asset.delete();
+
+        return asset;
     }
 }

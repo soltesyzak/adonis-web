@@ -15,19 +15,22 @@ export default class Asset extends BaseModel {
   public street: string;
 
   @column()
+  public streetNumber: number;
+
+  @column()
   public postalCode: string;
 
   @column()
   public area: number;
 
   @column()
-  public energyCategory: 'A' | 'B' | 'C' | 'D' | 'E';
+  public energyCategory: string;
 
   @column()
-  public descritpion: string;
+  public description: string;
 
   @column()
-  public type: 'house' | 'apartment';
+  public type: string;
 
   @column()
   public numberOfRooms: number;
@@ -37,12 +40,6 @@ export default class Asset extends BaseModel {
 
   @column()
   public value: number;
-
-  @column()
-  public maxValue: number;
-
-  @column()
-  public minValue: number;
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
