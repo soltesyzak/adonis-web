@@ -1,28 +1,35 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import Asset from 'App/Models/Asset';
 
 export default class AssetsController {
     public index = async (ctx: HttpContextContract) => {
-        return 'GET assets'
+        return Asset.all(); // SELECT * FROM mysql_db.assets
     }
 
     public store = async ({ request, response }: HttpContextContract) => {
+        const body = request.body();
+        const asset = await Asset.create(body); // create instance and save 
+
         response.status(201);
 
-        return {
-            message: 'POST asset',
-            body: request.body()
-        }
+        return asset;
     }
 
     public show = async ({ params }: HttpContextContract) => {
-        return `GET asset: ${params.id}`;
+        return Asset.findOrFail(params.id);
     }
 
-    public update = async ({ params }: HttpContextContract) => {
-        return `PUT asset ${params.id}`
+    public update = async ({ params, request }: HttpContextContract) => {
+        const body = request.body();
+        const asset = await Asset.findOrFail(params.id);
+
+        asset.value = body.value;
+
+        return asset.save();
     }
 
     public destroy = async ({ params }: HttpContextContract) => {
-        return `DELETE asset ${params.id}`
+        const asset = await Asset.findOrFail(params.id);
+        return asset.delete();
     }
 }
